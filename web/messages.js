@@ -1,5 +1,5 @@
-function createAccount(username) {
-  return fetch('/api/new', {
+function createAccount(username, callback) {
+  fetch('/api/new', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -12,17 +12,14 @@ function createAccount(username) {
   .then(response => response.json())
   .then(data => {
     if (data.success && data.token) {
-      return data.token;
+      callback(data.token);
     } else {
-      throw new Error('Account creation failed or token missing.');
+      console.error('Account creation failed or token missing.');
+      callback(null);
     }
   })
   .catch(error => {
     console.error('Error creating account:', error);
-    return null;
+    callback(null);
   });
 }
-
-setTimeout(function() {
-  console.log(createAccount)
-}, 5000)
