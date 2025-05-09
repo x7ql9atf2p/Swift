@@ -1,3 +1,396 @@
-<h1>
-  Frontend coming soon
-</h1>
+<script src="encryption.js"></script>
+<link rel="stylesheet" href="animate.css">
+
+<link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+<script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="words.js"></script>
+
+
+<link rel="stylesheet" href="icons/Default.css">
+<link rel="stylesheet" href="icons/Outlined.css">
+<link rel="stylesheet" href="fonts/style.css">
+<html class="mdui-theme-auto">
+
+</html>
+
+
+
+<style>
+
+    mdui-text-field::part(container) {
+      border-radius: 100px; /* Set 100px corner radius */
+    }
+svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+body {
+  padding-bottom: 0; /* Or at least less than the navigation bar height */
+}
+
+.navigation {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: auto; /* Ensures it doesn’t take unnecessary space */
+}
+
+.mdui-navigation-bar {
+  margin: 0;
+  padding: 0;
+    overflow: hidden; /* Prevents unwanted scrolling */
+
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+.mdui-navigation-bar {
+    box-sizing: border-box;
+}
+
+
+</style>
+
+<body style=" margin: 0;">
+
+<div style="position: relative;overflow: hidden">
+  <mdui-top-app-bar class="topbar" style="display: none;">
+    <mdui-button-icon disabled icon="chat" style="margin-right: 10px;"></mdui-button-icon>
+	<div style="flex-grow: 1;"></div>
+    <mdui-top-app-bar-title>Messages</mdui-top-app-bar-title>
+    <mdui-button-icon icon="more_vert"></mdui-button-icon>
+  </mdui-top-app-bar>
+<mdui-list style="z-index: 10;">
+  <mdui-list-item description="Black and white diamonds" rounded style="z-index: 10;">
+    Headline
+    <mdui-avatar slot="icon" src="https://avatars.githubusercontent.com/u/3030330?s=40&v=4"></mdui-avatar>
+    <h3 slot="end-icon">1:00AM</h3>
+  </mdui-list-item>
+</mdui-list>
+</div>
+
+<div class="fab-container">
+  <mdui-fab size="normal" class="new-contact" style="border-radius:100vw; z-index: 15; transform: scale(var(--mdui-scale, 1));" icon="chat_bubble"></mdui-fab>
+</div>
+<style>
+.fab-container {
+  position: fixed;
+  bottom: 1rem; /* Adjust spacing */
+  right: 1rem;
+  z-index: 10;
+}
+</style>
+ 
+  
+  
+
+<svg preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80" style="z-index: -1">
+    <defs>
+        <style>
+
+
+        </style>
+    </defs>
+	<path style="display: none;" fill="rgb(var(--mdui-color-primary))" class="in-top" d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z"/>
+    <path style="display: none;" fill="rgb(var(--mdui-color-primary))" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
+</svg>
+
+<script>
+
+
+</script>
+<mdui-dialog class="example-headline-slot">
+<mdui-icon slot="icon" name="router" style="font-size: 250%;"></mdui-icon>
+
+  <span slot="headline">Network</span>
+  <span slot="description">d</span>
+  <mdui-text-field variant="outlined" label="Hidden Network"></mdui-text-field>
+
+</mdui-dialog>
+
+
+<div style="margin: 0; display: flex; justify-content: center; align-items: center; overflow: hidden; position: absolute; inset: 0;">
+  <div>
+    <mdui-list>
+      <mdui-list-item nonclickable>
+        <h1 id="welcome-text" style="font-size: 5vh; opacity: 0.9; font-weight: 300;">Welcome.</h1>
+        <mdui-button full-width id="get-started-btn">Get started</mdui-button>
+      </mdui-list-item>
+    </mdui-list>
+  </div>
+</div>
+
+
+
+
+
+<script>
+const navigate = document.querySelector('.navigation');
+    document.querySelectorAll(".navigation").forEach(element => {
+	  element.style.animationDuration = "0s";
+	  element.classList.add('animate__animated', 'animate__zoomOutDown');
+    });
+	
+    document.querySelectorAll(".topbar").forEach(element => {
+	  element.style.animationDuration = "0s";
+	  element.classList.add('animate__animated', 'animate__zoomOutDown');
+    });
+	
+	    document.querySelectorAll(".new-contact").forEach(element => {
+	  element.style.animationDuration = "0s";
+	  element.classList.add('animate__animated', 'animate__zoomOutDown');
+    });
+
+const topElement = document.querySelector('.in-top');
+const bottomElement = document.querySelector('.in-bottom');
+
+function getCurrentRotation(element) {
+    const style = window.getComputedStyle(element);
+    const matrix = new DOMMatrix(style.transform);
+    return Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+}
+
+function applyRotationAnimation(element, duration, originX, originY) {
+    element.style.transformOrigin = `${originX}px ${originY}px`;
+    let startRotation = getCurrentRotation(element);
+    let startTime = null;
+
+    function updateRotation(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = (timestamp - startTime) / 1000;
+        const rotation = (elapsed / duration) * 360 + startRotation;
+        element.style.transform = `rotate(${rotation % 360}deg)`;
+        requestAnimationFrame(updateRotation);
+    }
+
+    requestAnimationFrame(updateRotation);
+}
+
+
+    	
+    document.querySelectorAll(".in-top").forEach(element => {
+	  element.style.animationDuration = "0s";
+	  element.classList.add('animate__animated', 'animate__fadeOutLeft');
+	  	  element.style.display = "block"
+
+    });
+	    document.querySelectorAll(".in-bottom").forEach(element => {
+			  element.style.animationDuration = "0s";
+	  element.classList.add('animate__animated', 'animate__fadeOutRight');
+	  element.style.display = "block"
+    });
+	
+	    document.querySelectorAll(".in-top").forEach(element => {
+		element.classList = ""
+	  element.style.animationDuration = "2s";
+	  element.classList.add('animate__animated', 'animate__fadeInLeft');
+	  	    element.addEventListener('animationend', function() {
+				element.classList = ""
+				    if (topElement) applyRotationAnimation(topElement, 10, 13, 25);
+  }, { once: true });
+
+    });
+	    document.querySelectorAll(".in-bottom").forEach(element => {
+				element.classList = ""
+
+			  element.style.animationDuration = "2s";
+	  element.classList.add('animate__animated', 'animate__fadeInRight');
+	    element.addEventListener('animationend', function() {
+				element.classList = ""
+				    if (bottomElement) applyRotationAnimation(bottomElement, 15, 84, 93);
+
+  }, { once: true });
+
+    });
+	
+
+
+
+  let button = document.getElementById('get-started-btn');
+  let welcomeText = document.getElementById("welcome-text");
+
+  // Add the initial animation
+  welcomeText.style.animationDuration = "0s";
+  button.style.animationDuration = "0s";
+  welcomeText.classList.add('animate__animated', 'animate__zoomOutDown');
+  button.classList.add('animate__animated', 'animate__zoomOutDown');
+  
+  welcomeText.classList = ""
+  button.classList = ""
+  
+  welcomeText.style.animationDuration = "2s";
+  button.style.animationDuration = "2s";
+  welcomeText.classList.add('animate__animated', 'animate__zoomInUp');
+  button.classList.add('animate__animated', 'animate__zoomInUp');
+
+
+
+setTimeout(function() {
+document.getElementById('get-started-btn').addEventListener('click', function() {
+ 
+  const dialog = document.querySelector(".example-headline-slot");
+
+  let button = this;
+  let welcomeText = document.getElementById("welcome-text");
+
+  // Add the initial animation
+  welcomeText.classList.add('animate__animated', 'animate__zoomOutDown');
+  button.classList.add('animate__animated', 'animate__zoomOutDown');
+
+  button.addEventListener('animationend', function() {
+	  topElement.classList.add('animate__animated', 'animate__fadeOutLeft');
+	  bottomElement.classList.add('animate__animated', 'animate__fadeOutRight');
+	  
+	  	
+    document.querySelectorAll(".topbar").forEach(element => {
+	  element.style.animationDuration = "2s";
+	  element.classList = ""
+	  element.classList.add('animate__animated', 'animate__zoomInUp');
+    });
+
+		    document.querySelectorAll(".new-contact").forEach(element => {
+	  element.style.animationDuration = "2s";
+	  element.classList = ""
+	  element.classList.add('animate__animated', 'animate__zoomInUp');
+    });
+	
+  }, { once: true });
+});
+}, 2.01)
+
+</script>
+
+
+</body>
+
+
+<script>
+function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+    }
+    return hash;
+}
+
+function seededRandom(seed) {
+    let x = Math.sin(seed) * 10000;
+    return x - Math.floor(x);
+}
+
+function generateCustomHashed(input) {
+    const seed = hashString(input);
+    let junk = '';
+    const base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    for (let i = 0; i < 32; i++) {
+        let charCode = Math.floor(seededRandom(seed + i) * base64Chars.length);
+        junk += base64Chars[charCode];
+    }
+    return junk;
+}
+
+function encryptMessage(sharedSecret, message) {
+    const key = CryptoJS.SHA256(sharedSecret);
+    const ivBase64 = generateCustomHashed(sharedSecret);
+    const iv = CryptoJS.enc.Base64.parse(ivBase64);
+
+    const encrypted = CryptoJS.AES.encrypt(message, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CTR,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return encrypted.toString();
+}
+
+function decryptMessage(sharedSecret, ciphertextBase64) {
+    const ivBase64 = generateCustomHashed(sharedSecret)
+    const key = CryptoJS.SHA256(sharedSecret);
+    const iv = CryptoJS.enc.Base64.parse(ivBase64);
+
+    if (!iv || !ciphertextBase64) return null;
+
+    try {
+        const decrypted = CryptoJS.AES.decrypt(ciphertextBase64, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CTR,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        return decrypted.toString(CryptoJS.enc.Utf8) || null;
+    } catch {
+        return null;
+    }
+}
+
+const botToken = 'MTMyNzkyNjQ0NjUxNzM4NzM0Nw.GQIl8c.vxpVM8ONAjYN5RFQU6uqKrIbx0yjyMFAyWuHG0'; // Replace with your bot's token
+
+async function checkValidUsername(user) {
+  try {
+    const guildsResponse = await fetch('https://discord.com/api/v10/users/@me/guilds', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bot ${botToken}`
+      }
+    });
+    const guilds = await guildsResponse.json();
+
+    if (guilds.length === 0) {
+      console.log('Bot is not in any guilds.');
+      return;
+    }
+
+    const firstGuildId = guilds[0].id;
+
+    const channelsResponse = await fetch(`https://discord.com/api/v10/guilds/${firstGuildId}/channels`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bot ${botToken}`
+      }
+    });
+    const channels = await channelsResponse.json();
+
+    const hellChannel = channels.find(channel => channel.name === user.split('.')[0] && channel.type === 0); // Type 0 is for text channels
+
+    if (hellChannel) {
+      return Number(hellChannel.id);
+    } else {
+      return `${user} is not a user on your network. Please check the username and try again.`;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function main() {
+    const result = await checkValidUsername("hell.xd");
+    if (typeof result === "string") { 
+      mdui.alert({
+        headline: "Username not found",
+        description: result,
+        confirmText: "OK",
+		closeOnOverlayClick: true
+      });
+	} else if (typeof result === "number") {
+		console.log("hi");
+	}
+}
+
+main();
+
+
+var encryptedMessage = encryptMessage("LOL", "Hi");
+console.log(encryptedMessage);
+
+var decryptedMessage = decryptMessage("LOL", encryptedMessage);
+console.log(decryptedMessage);
+
+</script>
