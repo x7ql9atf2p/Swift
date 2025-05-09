@@ -1,9 +1,9 @@
 {
-  "name": "cors-proxy",
+  "name": "messenger",
   "version": "1.0.0",
-  "main": "proxy.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "node proxy.js"
+    "start": "node main.js"
   }
 }
