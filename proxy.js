@@ -1,6 +1,6 @@
-const http = require('http');
-const https = require('https');
-const { URL } = require('url');
+import http from 'http';
+import https from 'https';
+import { URL } from 'url';
 
 const PORT = 8080;
 const SECRET_PASSWORD = 'examplepassword';
@@ -9,6 +9,7 @@ http.createServer((clientReq, clientRes) => {
   try {
     const reqUrl = new URL('http://localhost' + clientReq.url);
     const target = reqUrl.pathname.slice(1);
+
     if (reqUrl.searchParams.get('password') !== SECRET_PASSWORD) {
       clientRes.writeHead(403, { 'Content-Type': 'text/plain' });
       clientRes.end('Forbidden: Invalid password');
@@ -16,20 +17,17 @@ http.createServer((clientReq, clientRes) => {
     }
 
     const targetUrl = new URL(target);
-    const isHttps = targetUrl.protocol === 'https:';
-    const proxyModule = isHttps ? https : http;
+    const proxyModule = targetUrl.protocol === 'https:' ? https : http;
 
     const headers = { ...clientReq.headers };
     delete headers['user-agent'];
     delete headers['User-Agent'];
     delete headers['host'];
 
-    const proxyOptions = {
+    const proxyReq = proxyModule.request(targetUrl, {
       method: clientReq.method,
       headers,
-    };
-
-    const proxyReq = proxyModule.request(targetUrl, proxyOptions, proxyRes => {
+    }, proxyRes => {
       clientRes.writeHead(proxyRes.statusCode, {
         ...proxyRes.headers,
         'Access-Control-Allow-Origin': '*',
@@ -61,5 +59,5 @@ http.createServer((clientReq, clientRes) => {
     clientRes.end('Bad Request: ' + err.message);
   }
 }).listen(PORT, () => {
-  console.log(`Proxy running on: http://localhost:${PORT}`);
+  console.log(`Secure CORS proxy running on http://localhost:${PORT}/https://target.com?password=examplepassword`);
 });
